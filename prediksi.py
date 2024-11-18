@@ -5,21 +5,49 @@ from joblib import load
 # Load model yang sudah disimpan
 model = load('model_depok.joblib')
 
-# Judul aplikasi
-st.title("Prediksi Harga Rumah Bekas di Depok")
+# Judul aplikasi dengan tampilan lebih menarik
+st.title("🏡 Prediksi Harga Rumah Second di Depok")
 
 # Deskripsi aplikasi
 st.markdown("""
-Aplikasi ini akan membantu Anda memprediksi harga rumah bekas di Depok berdasarkan beberapa fitur seperti jumlah kamar tidur, luas tanah, luas bangunan, sertifikat, dan lokasi.
+Selamat datang di aplikasi prediksi harga rumah second di Depok! 
+Masukkan informasi rumah yang ingin kamu prediksi harganya, dan kami akan memberikan perkiraan harga lengkap dengan rentang harga yang bisa kamu pertimbangkan.
 """)
 
+# Styling header dan teks
+st.markdown("""
+<style>
+    .st-header {
+        font-size: 30px;
+        font-weight: bold;
+        color: #2E3B4E;
+    }
+    .st-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        font-size: 18px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+    }
+    .st-button:hover {
+        background-color: #45a049;
+    }
+    .st-subheader {
+        font-size: 22px;
+        color: #444;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Input data dari pengguna
-st.header("Masukkan Informasi Rumah")
+st.header("Masukkan Info Rumah Kamu")
 
 # Input angka untuk fitur numerik tanpa min_value dan max_value
-kamar_tidur = st.number_input("Jumlah Kamar Tidur", value=3)
-luas_tanah = st.number_input("Luas Tanah (m²)", value=100)
-luas_bangunan = st.number_input("Luas Bangunan (m²)", value=80)
+kamar_tidur = st.number_input("Jumlah Kamar Tidur", value=3, step=1)
+luas_tanah = st.number_input("Luas Tanah (m²)", value=100, step=1)
+luas_bangunan = st.number_input("Luas Bangunan (m²)", value=80, step=1)
 
 # Input untuk fitur kategorikal
 sertifikat_options = ['Sertifikat Hak Milik', 'Hak Guna Bangunan']
@@ -47,12 +75,12 @@ def format_harga(harga):
         return f"Rp {harga:,.2f}"
 
 # Prediksi harga rumah berdasarkan input
-if st.button("Prediksi Harga Rumah"):
+if st.button("Prediksi Harga Rumah", key="predict_btn"):
     # Lakukan prediksi menggunakan model
     prediksi_harga = model.predict(input_data)[0]
 
-    # Tentukan rentang harga dengan 40% margin
-    rentang = prediksi_harga * 0.1
+    # Tentukan rentang harga dengan 10% margin
+    rentang = prediksi_harga * 0.1  # 10% margin untuk rentang harga
     rentang_bawah = prediksi_harga - rentang
     rentang_atas = prediksi_harga + rentang
 
@@ -63,8 +91,9 @@ if st.button("Prediksi Harga Rumah"):
     # Tampilkan rentang harga
     st.subheader(f"Rentang Harga Rumah: {rentang_bawah_format} - {rentang_atas_format}")
 
-# Tampilan Footer
+# Tampilan Footer dengan gaya santai
 st.markdown("""
 ---
+Ini adalah aplikasi prediksi harga rumah, semoga membantu! 😄
 Developed by Arvin Surya Wibowo
-""")
+""", unsafe_allow_html=True)
